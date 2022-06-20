@@ -2,6 +2,7 @@ clear;
 close all;clc;
 
 %% working path includes patient data
+%% patient folder
 folder_name_orig = 'D:\Ying\Anatomical_Model\';
 
 dirOutput = dir(fullfile(folder_name_orig,'17*'));
@@ -11,19 +12,20 @@ for i = 1: length(dirOutput)
     fileNames{i,1} = [folder_name_orig Name{i,1}];
 end
 
+%% altas and atlas mask path, mask is the outline of the patient
 average_name = 'D:\Ying\Patients\average.nii.gz';
 average_mask = 'D:\Ying\Patients\average_mask.nii.gz';
 
 all = 1 : length(Name);
 %% get deformable image registration fields for each patient
 for p = 1 : length(Name)
-    
+    %% in patient folder, wk*.nii is the nifty data of the weekly CT
     list_nii = dir(fullfile(fileNames{p,1},'wk*.nii'));
     list_nii_name = {list_nii.name};
     tmp = regexpi(list_nii_name,'wk..nii','match');
     ind = ~cellfun(@isempty, tmp);
     list_nii_name = list_nii_name(ind);
-    
+    %% in patient folder, wk*_mask.nii is the mask of the body of the weekly CTs
     list_mask = dir(fullfile(fileNames{p,1},'wk*_mask.nii'));
     list_mask_name = {list_mask.name};
     tmp = regexpi(list_mask_name,'wk._mask.nii','match');
